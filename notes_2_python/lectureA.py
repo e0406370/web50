@@ -87,8 +87,8 @@ print()
 
 for char in strawhat_members[0]:
     print(char, end=" ")
-print()  
-  
+print()
+
 strawhat_roles_dict = {
     "Monkey D. Luffy": "Captain",
     "Roronoa Zoro": "Swordsman",
@@ -99,7 +99,7 @@ strawhat_roles_dict = {
     "Nico Robin": "Archaeologist",
     "Franky": "Shipwright",
     "Brook": "Musician",
-    "Jinbe": "Helmsman"
+    "Jinbe": "Helmsman",
 }
 strawhat_roles_dict["Vivi"] = "Honorary Member"
 

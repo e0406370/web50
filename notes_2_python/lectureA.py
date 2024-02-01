@@ -50,9 +50,20 @@ print(coordinate)
 
 # Data Structures
 # list - sequence of MUTABLE values
+# ordered: yes
+# mutable: yes
+
 # tuple - sequence of IMMUTABLE values
+# ordered: yes
+# mutable: no
+
 # set - collection of UNIQUE values
+# ordered: no
+# mutable: N/A
+
 # dict - collection of K-V pairs
+# ordered: no
+# mutable: yes
 
 strawhat_members.append("Vivi")
 strawhat_members.sort()

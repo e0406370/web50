@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello</title>
+
+    <!-- Toggles the content of the <h1> element -->
+    <script>
+      function hello() {
+        // Selects the <h1> element
+        const header = document.querySelector("h1");
+
+        // Checks if the current content is "Hello!"
+        if (header.innerHTML === "Hello!") {
+
+          // If it is "Hello!", change it to "Goodbye!"
+          header.innerHTML = "Goodbye!";
+        } 
+        
+        else {
+          
+          // If it's not "Hello!", change it back to "Hello!"
+          header.innerHTML = "Hello!";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Hello!</h1>
+
+    <!-- The onclick attribute gives the browser instructions for what should happen when the button is clicked --->
+    <!-- In this case, it calls the hello() function located in the script block when the button is clicked -->
+    <button onclick="hello()">Click Here</button>
+  </body>
+</html>

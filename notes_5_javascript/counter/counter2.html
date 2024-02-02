@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Count</title>
+
+    <!-- Keeps track of a counter, which increments every time the button is clicked -->
+    <!-- Manipulates the DOM to change the number present in the <h1> tag to the counter -->
+    <script>
+      let counter = 0;
+      function count() {
+        counter++;
+        document.querySelector("h1").innerHTML = counter;
+
+        // Displays an alert every time the counter gets to a multiple of 10.
+        if (counter % 10 === 0) {
+          // Template literals require backticks (`) around the entire expression and a set of $ + curly braces around any substitutions.
+          alert(`Count is now ${counter}`);
+        }
+      }
+
+      // Note:
+      // Writing the 'document.querySelector("button").onclick = count;' alone will not suffice because
+      // it will take a small bit of time for the page to load, and the JavaScript code will run before the button had been rendered.
+
+      // To account for this, we can specify that code will run only after the page has loaded using the 'addEventListener' function.
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("button").onclick = count;
+      });
+
+      // This function takes in two arguments:
+      // 1. An event to listen for (eg: 'click')
+      // 2. A function to run when the event is detected (eg: count from above)
+    </script>
+    
+  </head>
+  <body>
+    <h1>0</h1>
+
+    <button>Count</button>
+  </body>
+</html>

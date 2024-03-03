@@ -1,0 +1,19 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    404 ERROR
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-danger">
+      404 Error
+    </h1>
+
+    <h2>
+      Requested page for "{{ entry_title | upper }}" was not found!
+    </h2>
+    <br />
+
+    <img src="../../static/encyclopedia/404.jpg" height="350px" width="500px">
+
+{% endblock %}

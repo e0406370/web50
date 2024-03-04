@@ -2,7 +2,9 @@ import random
 import markdownify
 
 from django import forms
+from django.contrib import messages
 from django.shortcuts import redirect, render
+
 from markdown2 import Markdown
 
 from . import util
@@ -42,11 +44,21 @@ def search_entry(request):
 class EntryForm(forms.Form):
 
     title = forms.CharField(
-        widget=forms.TextInput(attrs={"name": "title"})
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control", 
+                "name": "title"
+            }
+        )
     )
     
     contents = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "form-control", "name": "contents", "rows": 10})
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control", 
+                "name": "contents"
+            }
+        )
     )
 
 def create_entry(request):
@@ -54,17 +66,27 @@ def create_entry(request):
     if request.method == "POST":
 
         form = EntryForm(request.POST)
-
+    
         if form.is_valid():
-            entry_title = form.cleaned_data["title"].strip().capitalize()
-            entry_contents = form.cleaned_data["contents"].strip()
+            entry_title = form.cleaned_data["title"]
+            entry_contents = form.cleaned_data["contents"]
             
-            util.save_entry(
-                entry_title, 
-                markdownify.markdownify(entry_contents)
-            )
-            
-            return redirect("wiki", entry_title=entry_title)
+            if util.get_entry(entry_title):
+                messages.error(request, f"Entry with title '{entry_title}' already exists.")
+                
+                return render(
+                    request,
+                    "encyclopedia/create.html",
+                    {"form": form}
+                )
+                
+            else:
+                util.save_entry(
+                    entry_title.strip().capitalize(), 
+                    markdownify.markdownify(entry_contents.strip())
+                )
+                
+                return redirect("wiki", entry_title=entry_title)
 
     return render(
         request, 

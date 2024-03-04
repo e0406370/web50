@@ -17,14 +17,26 @@
     <label for="title">
       <h3>Title</h3>
     </label>
+
     <div>
       {{ form.title }}
+
+      <ul class="text-danger">
+        {% if messages %}
+
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+
+        {% endif %}
+      </ul>
     </div>
     <br />
 
     <label for="contents">
       <h3>Contents</h3>
     </label>
+    
     <div>
       {{ form.contents }}
     </div>

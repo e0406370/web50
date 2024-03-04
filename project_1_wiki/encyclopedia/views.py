@@ -38,6 +38,40 @@ def search_entry(request):
         "encyclopedia/search.html", 
         {"results": results, "query": query}
     )
+    
+class EntryForm(forms.Form):
+
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={"name": "title"})
+    )
+    
+    contents = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "name": "contents", "rows": 10})
+    )
+
+def create_entry(request):
+
+    if request.method == "POST":
+
+        form = EntryForm(request.POST)
+
+        if form.is_valid():
+            entry_title = form.cleaned_data["title"].strip().capitalize()
+            entry_contents = form.cleaned_data["contents"].strip()
+            
+            util.save_entry(
+                entry_title, 
+                markdownify.markdownify(entry_contents)
+            )
+            
+            return redirect("wiki", entry_title=entry_title)
+
+    return render(
+        request, 
+        "encyclopedia/create.html", 
+        {"form": EntryForm()}
+    )
+
 
 def view_entry(request, entry_title):
 

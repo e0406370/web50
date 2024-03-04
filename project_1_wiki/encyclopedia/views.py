@@ -1,11 +1,11 @@
-from . import util
-
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django import forms
-
-from markdown2 import Markdown
 import random
+import markdownify
+
+from django import forms
+from django.shortcuts import redirect, render
+from markdown2 import Markdown
+
+from . import util
 
 
 def index(request):
@@ -64,10 +64,8 @@ def save_entry(request, entry_title):
     if request.method == "POST":
 
         entry_contents = request.POST.get("edit").strip()
-        
-        markdowner = Markdown()
 
-        util.save_entry(entry_title.capitalize(), markdowner.convert(entry_contents))
+        util.save_entry(entry_title.capitalize(), markdownify.markdownify(entry_contents.strip()))
         
         return redirect("wiki", entry_title=entry_title)
 

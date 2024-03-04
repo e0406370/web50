@@ -17,6 +17,28 @@ def index(request):
     )
 
 
+def search_entry(request):
+    
+    query = request.GET.get("q").strip()
+    
+    entries = util.list_entries()
+    
+    for entry in entries:
+        if (query == entry):
+            return redirect("wiki", entry_title=entry)
+    
+    results = []
+    
+    for entry in entries:
+        if entry.lower().find(query.lower()) != -1:
+            results.append(entry)
+    
+    return render(
+        request, 
+        "encyclopedia/search.html", 
+        {"results": results, "query": query}
+    )
+
 def view_entry(request, entry_title):
 
     entry_contents = util.get_entry(entry_title)

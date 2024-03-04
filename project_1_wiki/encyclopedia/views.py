@@ -40,6 +40,7 @@ def search_entry(request):
         "encyclopedia/search.html", 
         {"results": results, "query": query}
     )
+
     
 class EntryForm(forms.Form):
 
@@ -60,6 +61,7 @@ class EntryForm(forms.Form):
             }
         )
     )
+
 
 def create_entry(request):
 
@@ -82,7 +84,7 @@ def create_entry(request):
                 
             else:
                 util.save_entry(
-                    entry_title.strip().capitalize(), 
+                    entry_title.strip(), 
                     markdownify.markdownify(entry_contents.strip())
                 )
                 
@@ -143,12 +145,14 @@ def save_entry(request, entry_title):
 
         entry_contents = request.POST.get("edit").strip()
 
-        util.save_entry(entry_title.capitalize(), markdownify.markdownify(entry_contents.strip()))
+        util.save_entry(
+            entry_title, 
+            markdownify.markdownify(entry_contents.strip())
+        )
         
         return redirect("wiki", entry_title=entry_title)
 
 
-        
 def random_entry(request):
 
     random_entry = random.choice(util.list_entries())

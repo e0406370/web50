@@ -6,4 +6,13 @@
 
 {% block body %}
     {{ entry_contents | safe }}
+
+    <hr />
+    <div>
+        <button type="button" class="btn btn-success">
+            <a href="../edit/{{ entry_title }}" class="text-decoration-none text-light"> 
+                Edit
+            </a>
+        </button>
+    </div>
 {% endblock %}

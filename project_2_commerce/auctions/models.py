@@ -10,7 +10,7 @@ class User(AbstractUser):
     pass
 
 # foreign key to user
-class Listing(models.model):
+class Listing(models.Model):
 
     ## DEFINED IN 'Create Listing' FORM
     title = models.CharField(max_length=64)  # required
@@ -26,15 +26,15 @@ class Listing(models.model):
 
 # foreign key to user
 # foreign key to listing
-class Bid(models.model):
+class Bid(models.Model):
     bid_amount = models.FloatField()  # value of bid in decimal
-    bid_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder")  # User linked to this bid
-    bid_listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing")  # Listing linked to this bid
+    bid_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")  # User linked to this bid
+    bid_listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")  # Listing linked to this bid
 
 
 # foreign key to user
 # foreign key to listing
-class Comment(models.model):
+class Comment(models.Model):
     comment_text = models.CharField(max_length=256)  # value of comment in string
-    comment_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")  # User linked to this comment
-    comment_listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing")  # Listing linked to this comment
+    comment_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  # User linked to this comment
+    comment_listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")  # Listing linked to this comment

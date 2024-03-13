@@ -87,3 +87,13 @@ def get_highest_bid(listing: Listing):
     highest_bid = max([bid.bid_amount for bid in existing_bids])
     
     return highest_bid
+
+def is_valid_bid(bid: float, listing: Listing):
+    
+    if (bid < listing.starting_bid):
+        return False
+    
+    if (bid < get_highest_bid(listing)):
+        return False
+    
+    return True

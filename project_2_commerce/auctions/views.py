@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -63,7 +64,7 @@ def view_listing(request, listing_id):
          "listing_id": listing_id, 
          "is_in_watchlist": is_in_watchlist,
          "comments": comments,
-         "highest_bid": highest_bid,
+         "highest_bid": highest_bid
         }
     )
 
@@ -290,11 +291,21 @@ def add_bid(request, listing_id):
         
         bid_amount = request.POST.get("bid")
         
-        new_bid = Bid(
-            bid_amount=bid_amount,
-            bid_user=current_user,
-            bid_listing=selected_listing,
-        )
-        new_bid.save()
+        if util.is_valid_bid(float(bid_amount), selected_listing):
+            
+            new_bid = Bid(
+                bid_amount=bid_amount,
+                bid_user=current_user,
+                bid_listing=selected_listing,
+            )
+            new_bid.save()
+            
+            return redirect('listing', listing_id=selected_listing.id)
+        
+        else:
+            error_message = "Invalid bid amount. Bid must be higher than the starting bid and the highest bid."
+            messages.error(request, error_message)
+            
+            return redirect('listing', listing_id=selected_listing.id)
         
     return redirect('listing', listing_id=selected_listing.id)

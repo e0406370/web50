@@ -125,6 +125,14 @@
             name="bid"
           > 
         </div>
+        <ul class="text-danger">
+          {% if messages %}
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+        <br />
 
         <button type="submit" class="btn btn-info">
           Submit Bid

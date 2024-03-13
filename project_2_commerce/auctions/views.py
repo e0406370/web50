@@ -49,17 +49,19 @@ def view_listing(request, listing_id):
     
     listing = util.get_listing_by_id(listing_id)
     user = request.user
+    
     is_in_watchlist = False
+    is_listing_created_by_user = False
+    is_highest_bidder = False
     
     if user.is_authenticated:
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
+        is_listing_created_by_user = util.is_listing_created_by_user(user, listing_id)
+        is_highest_bidder = util.is_auction_winner(user, listing_id)
                 
     comments = util.get_comments_by_listing(listing)
     highest_bid = util.get_highest_bid(listing)
     
-    is_listing_created_by_user = util.is_listing_created_by_user(user, listing_id)
-    is_highest_bidder = util.is_auction_winner(user, listing_id)
-
     return render(
         request,
         "auctions/listing.html",
@@ -222,7 +224,7 @@ def create_listing(request):
                 creation_user=request.user,
             )
 
-            return HttpResponseRedirect(reverse("listing"), args=(new_listing.id))
+            return redirect('listing', listing_id=new_listing.id)
 
         else:
             return render(

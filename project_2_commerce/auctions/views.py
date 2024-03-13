@@ -1,12 +1,12 @@
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from auctions import util
-
 from .models import Listing, User
 
 
@@ -108,7 +108,8 @@ class ListingForm(forms.Form):
                 "class": "form-control", 
                 "name": "image_url"
             }
-        )
+        ),
+        required=False
     )
     
     categories = forms.CharField(
@@ -117,7 +118,8 @@ class ListingForm(forms.Form):
                 "class": "form-control", 
                 "name": "categories"
             }
-        )
+        ),
+        required=False
     ) 
 
     def clean(self):
@@ -132,7 +134,7 @@ class ListingForm(forms.Form):
         if data.get('starting_bid') is None:
             raise forms.ValidationError('Must indicate a starting bid for the listing!')
             
-
+@login_required
 def create_listing(request):
 
     if request.method == "POST":
@@ -146,12 +148,16 @@ def create_listing(request):
             listing_image_url = form.cleaned_data["image_url"]
             listing_categories = form.cleaned_data["categories"]
             
+            if not listing_image_url:
+                listing_image_url = util.placeholder_image
+                
             new_listing = Listing.objects.create(
                 title = listing_title,
                 description = listing_description,
                 starting_bid = listing_starting_bid,
-                image_url = listing_image_url | util.placeholder_image,
-                categories = util.parse_categories(listing_categories) | util.no_category
+                image_url = listing_image_url,
+                categories = util.parse_categories(listing_categories),
+                creation_user = request.user
             )
             
             return HttpResponseRedirect(reverse("index"))

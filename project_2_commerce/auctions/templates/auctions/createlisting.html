@@ -6,7 +6,9 @@
 
 {% block body %}
 
-<h2>Create New Listing</h2>
+<h2>
+  <u>Create New Listing</u>
+</h2>
 <hr />
 
 <div class="form-group">
@@ -18,6 +20,12 @@
       <h3>Title</h3>
     </label>
 
+    {% if form.title.errors %}
+      <small class="text-danger">
+        {{ form.title.errors }}
+      </small>
+    {% endif %}
+
     <div>
       {{ form.title }}
     </div>
@@ -26,6 +34,12 @@
     <label for="description">
       <h3>Description</h3>
     </label>
+
+    {% if form.description.errors %}
+    <small class="text-danger">
+      {{ form.description.errors }}
+    </small>
+   {% endif %}
     
     <div>
       {{ form.description }}
@@ -35,6 +49,12 @@
     <label for="starting_bid">
       <h3>Starting Bid</h3>
     </label>
+
+    {% if form.starting_bid.errors %}
+    <small class="text-danger">
+      {{ form.starting_bid.errors }}
+    </small>
+    {% endif %}
     
     <div>
       {{ form.starting_bid }}
@@ -52,7 +72,7 @@
 
     <label for="categories">
       <h3>Categories</h3>
-      <h6>Include a whitespace character between each category</h6>
+      <h6>Note: Include a whitespace character between each category!</h6>
     </label>
     
     <div>

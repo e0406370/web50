@@ -20,9 +20,8 @@ class Listing(models.Model):
     categories = models.JSONField(default=list, blank=True, null=True)  # optional
 
     ## INITIALISED UPON CREATION
-    listing_id = models.UUIDField()  # path variable for accessing listings
     creation_date = models.DateTimeField(auto_now_add=True)  # when the listing was created
-    creation_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lister")  # User who created the listing
+    creation_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")  # User who created the listing
 
 # foreign key to user
 # foreign key to listing

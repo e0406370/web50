@@ -2,9 +2,9 @@
 
 {% block body %}
 
-    <h2>Active Listings</h2>
+    <h2>Watchlist</h2>
 
-    {% if listings %}
+    {% if watchlist %}
         <table class="table table-striped table-bordered table-dark">
             <thead>
                 <tr>
@@ -21,7 +21,7 @@
             </thead>
 
             <tbody>
-                {% for listing in listings %}
+                {% for listing in watchlist %}
                     <tr>
                         <td>{{ listing.id }}</td>
                         <td>{{ listing.title }}</td>

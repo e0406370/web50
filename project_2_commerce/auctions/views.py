@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from auctions import util
 
-from .models import Listing, User
+from .models import Listing, User, WatchList
 
 
 def index(request):
@@ -42,15 +42,21 @@ def category_listing(request, category):
         "auctions/categorylisting.html",
         {"listings": listings, "category": category},
     )
+ 
     
 def view_listing(request, listing_id):
     
     listing = Listing.objects.get(id=listing_id)
+    user = request.user
+    is_in_watchlist = False
+    
+    if user.is_authenticated:
+        is_in_watchlist = util.is_listing_in_watchlist(user, listing)
     
     return render(
         request,
         "auctions/listing.html",
-        {"listing": listing, "listing_id": listing_id},
+        {"listing": listing, "listing_id": listing_id, "is_in_watchlist": is_in_watchlist},
     )
 
 
@@ -158,7 +164,7 @@ class ListingForm(forms.Form):
             attrs={
                 "class": "form-control", 
                 "name": "categories"
-            }
+                }
         ),
         required=False,
     )
@@ -205,8 +211,50 @@ def create_listing(request):
             return HttpResponseRedirect(reverse("listing"), args=(new_listing.id))
 
         else:
-            return render(request, "auctions/createlisting.html", {"form": form})
+            return render(
+                request, 
+                "auctions/createlisting.html", 
+                {"form": form}
+            )
 
-    return render(request, "auctions/createlisting.html", {"form": ListingForm()})
+    return render(
+        request, 
+        "auctions/createlisting.html", 
+        {"form": ListingForm()}
+    )
 
+@login_required
+def add_to_watchlist(request, listing_id):
+    selected_listing = Listing.objects.get(id=listing_id)
+    
+    watchlist = WatchList.objects.filter(user=request.user).first()
+        
+    if (watchlist is None):
+        WatchList.objects.create(user=request.user, listing=selected_listing)
 
+    else:
+        watchlist.listing.add(selected_listing)
+    
+    return HttpResponseRedirect(reverse("watchlist"))
+
+@login_required
+def delete_from_watchlist(request, listing_id):
+    selected_listing = Listing.objects.get(id=listing_id)
+    
+    watchlist_listing = WatchList.objects.filter(user=request.user, listing=selected_listing).first()
+    watchlist_listing.delete()
+    
+    return HttpResponseRedirect(reverse("watchlist"))
+
+@login_required
+def view_watchlist(request):
+    
+    watchlist_objects = WatchList.objects.filter(user=request.user)
+    
+    watchlist_listings = [obj.listing for obj in watchlist_objects]
+    
+    return render(
+        request, 
+        "auctions/watchlist.html",
+        {"watchlist": watchlist_listings}
+    )

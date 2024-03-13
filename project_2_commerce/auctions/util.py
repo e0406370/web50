@@ -1,4 +1,4 @@
-from .models import Listing
+from .models import Listing, User, WatchList
 
 placeholder_image = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/1022px-Placeholder_view_vector.svg.png"
 
@@ -36,3 +36,9 @@ def get_listings_by_category(category: str):
     ]
 
     return filtered_listings
+
+
+def is_listing_in_watchlist(user: User, listing: Listing):
+
+    return WatchList.objects.filter(user=user, listing=listing).exists()
+    

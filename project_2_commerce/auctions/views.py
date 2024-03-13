@@ -15,9 +15,19 @@ def index(request):
     listings = Listing.objects.all()
 
     return render(
-        request, 
+        request,
         "auctions/index.html",
         {"listings": listings}
+    )
+    
+def categories(request):
+    
+    categories = util.get_categories()
+    
+    return render(
+        request,
+        "auctions/categories.html",
+        {"categories": categories}
     )
 
 
@@ -59,9 +69,7 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(
-                request, 
-                "auctions/register.html", 
-                {"message": "Passwords must match."}
+                request, "auctions/register.html", {"message": "Passwords must match."}
             )
 
         # Attempt to create new user
@@ -83,101 +91,71 @@ def register(request):
 class ListingForm(forms.Form):
 
     title = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control", 
-                "name": "title"
-            }
-        )
+        widget=forms.TextInput(attrs={"class": "form-control", "name": "title"})
     )
-    
+
     description = forms.CharField(
-        widget=forms.Textarea(
-            attrs={
-                "class": "form-control", 
-                "name": "description"
-            }
-        )
+        widget=forms.Textarea(attrs={"class": "form-control", "name": "description"})
     )
-    
+
     starting_bid = forms.FloatField(
         widget=forms.NumberInput(
-            attrs={
-                "class": "form-control",
-                "name": "starting_bid"
-            }
+            attrs={"class": "form-control", "name": "starting_bid"}
         )
     )
-    
+
     image_url = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control", 
-                "name": "image_url"
-            }
-        ),
-        required=False
+        widget=forms.TextInput(attrs={"class": "form-control", "name": "image_url"}),
+        required=False,
     )
-    
+
     categories = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control", 
-                "name": "categories"
-            }
-        ),
-        required=False
-    ) 
+        widget=forms.TextInput(attrs={"class": "form-control", "name": "categories"}),
+        required=False,
+    )
 
     def clean(self):
         data = self.cleaned_data
-        
-        if data.get('title') is None:
-            raise forms.ValidationError('Must indicate a title for the listing!')
-        
-        if data.get('description') is None:
-            raise forms.ValidationError('Must indicate a description for the listing!')
-        
-        if data.get('starting_bid') is None:
-            raise forms.ValidationError('Must indicate a starting bid for the listing!')
-            
+
+        if data.get("title") is None:
+            raise forms.ValidationError("Must indicate a title for the listing!")
+
+        if data.get("description") is None:
+            raise forms.ValidationError("Must indicate a description for the listing!")
+
+        if data.get("starting_bid") is None:
+            raise forms.ValidationError("Must indicate a starting bid for the listing!")
+
+
 @login_required
 def create_listing(request):
 
     if request.method == "POST":
 
         form = ListingForm(request.POST)
-    
+
         if form.is_valid():
             listing_title = form.cleaned_data["title"]
             listing_description = form.cleaned_data["description"]
             listing_starting_bid = form.cleaned_data["starting_bid"]
             listing_image_url = form.cleaned_data["image_url"]
             listing_categories = form.cleaned_data["categories"]
-            
+
             if not listing_image_url:
                 listing_image_url = util.placeholder_image
-                
+
             new_listing = Listing.objects.create(
-                title = listing_title,
-                description = listing_description,
-                starting_bid = listing_starting_bid,
-                image_url = listing_image_url,
-                categories = util.parse_categories(listing_categories),
-                creation_user = request.user
-            )
-            
-            return HttpResponseRedirect(reverse("index"))
-        
-        else:
-            return render(
-                request,
-                "auctions/createlisting.html",
-                {"form": form}
+                title=listing_title,
+                description=listing_description,
+                starting_bid=listing_starting_bid,
+                image_url=listing_image_url,
+                categories=util.parse_categories(listing_categories),
+                creation_user=request.user,
             )
 
-    return render(
-        request, 
-        "auctions/createlisting.html", 
-        {"form": ListingForm()}
-    )
+            return HttpResponseRedirect(reverse("index"))
+
+        else:
+            return render(request, "auctions/createlisting.html", {"form": form})
+
+    return render(request, "auctions/createlisting.html", {"form": ListingForm()})

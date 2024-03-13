@@ -11,8 +11,10 @@
                 <th>L/N</th>
                 <th>Title</th>
                 <th>Description</th>
-                <th>Starting Bid</th>
-                <th>Created Date & Time</th>
+                <th>Current Price</th>
+                <th>Created On</th>
+                <th>Created By</th>
+                <th>Categories</th>
                 <th>Image</th>
                 </tr>
             </thead>
@@ -25,6 +27,8 @@
                         <td>{{ listing.description }}</td>
                         <td>${{ listing.starting_bid | floatformat:2 }}</td>
                         <td>{{ listing.creation_date }}</td>
+                        <td>{{ listing.creation_user.username }}</td>
+                        <td>{{ listing.categories }}</td>
                         <td>
                             <img src={{ listing.image_url }} height="200px" width="200px" />
                         </td>

@@ -16,7 +16,23 @@ def get_categories():
 
         if listing.categories:
             all_categories.update(
-                category.strip().title() for category in listing.categories if category
+                category.strip().title() 
+                for category in listing.categories 
+                if category
             )
 
     return sorted(all_categories)
+
+
+def get_listings_by_category(category: str):
+
+    all_listings = Listing.objects.all()
+
+    filtered_listings = [
+        listing 
+        for listing in all_listings
+        for listing_category in listing.categories
+        if listing_category.strip().title() == category
+    ]
+
+    return filtered_listings

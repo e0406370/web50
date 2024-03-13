@@ -30,6 +30,15 @@ def categories(request):
         {"categories": categories}
     )
 
+def category_listing(request, category):
+    
+    listings = util.get_listings_by_category(category)
+    
+    return render(
+        request,
+        "auctions/categorylisting.html",
+        {"listings": listings, "category": category}
+    )
 
 def login_view(request):
     if request.method == "POST":

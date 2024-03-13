@@ -8,14 +8,15 @@
         <table class="table table-striped table-bordered table-dark">
             <thead>
                 <tr>
-                <th>L/N</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Current Price</th>
-                <th>Created On</th>
-                <th>Created By</th>
-                <th>Categories</th>
-                <th>Image</th>
+                    <th>L/N</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Current Price</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Categories</th>
+                    <th>Image</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -31,6 +32,13 @@
                         <td>{{ listing.categories }}</td>
                         <td>
                             <img src={{ listing.image_url }} height="200px" width="200px" />
+                        </td>
+                        <td>
+                            <a href="{% url 'listing' listing.id %}">
+                                <button type="button" class="btn btn btn-success">
+                                    View Listing
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -14,31 +14,36 @@ def index(request):
 
     listings = Listing.objects.all()
 
-    return render(
-        request,
-        "auctions/index.html",
-        {"listings": listings}
-    )
-    
+    return render(request, "auctions/index.html", {"listings": listings})
+
+
 def categories(request):
-    
+
     categories = util.get_categories()
-    
-    return render(
-        request,
-        "auctions/categories.html",
-        {"categories": categories}
-    )
+
+    return render(request, "auctions/categories.html", {"categories": categories})
+
 
 def category_listing(request, category):
-    
+
     listings = util.get_listings_by_category(category)
-    
+
     return render(
         request,
         "auctions/categorylisting.html",
-        {"listings": listings, "category": category}
+        {"listings": listings, "category": category},
     )
+    
+def view_listing(request, listing_id):
+    
+    listing = Listing.objects.get(id=listing_id)
+    
+    return render(
+        request,
+        "auctions/listing.html",
+        {"listing": listing, "listing_id": listing_id},
+    )
+
 
 def login_view(request):
     if request.method == "POST":
@@ -162,9 +167,11 @@ def create_listing(request):
                 creation_user=request.user,
             )
 
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("listing"), args=(new_listing.id))
 
         else:
             return render(request, "auctions/createlisting.html", {"form": form})
 
     return render(request, "auctions/createlisting.html", {"form": ListingForm()})
+
+

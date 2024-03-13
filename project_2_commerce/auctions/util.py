@@ -8,11 +8,6 @@ def parse_categories(categories_string: str):
     return categories_string.split(" ")
 
 
-def get_listings():
-    
-    return Listing.objects.all()
-
-
 def get_categories():
 
     all_categories = set()
@@ -29,6 +24,16 @@ def get_categories():
     return sorted(all_categories)
 
 
+def get_listings():
+    
+    return Listing.objects.all()
+
+
+def get_listing_by_id(listing_id: int):
+    
+    return Listing.objects.get(id=listing_id)
+
+
 def get_listings_by_category(category: str):
 
     all_listings = Listing.objects.all()
@@ -41,11 +46,6 @@ def get_listings_by_category(category: str):
     ]
 
     return filtered_listings
-
-
-def get_listing_by_id(listing_id: int):
-    
-    return Listing.objects.get(id=listing_id)
 
 
 def add_listing_to_watchlist(user: User, listing: Listing):
@@ -70,6 +70,7 @@ def get_watchlist_by_user(user: User):
     watchlist_listings = [obj.listing for obj in watchlist_objects]
     
     return watchlist_listings
+
 
 def get_comments_by_listing(listing: Listing):
     

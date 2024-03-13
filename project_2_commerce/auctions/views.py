@@ -14,7 +14,7 @@ from .models import Bid, Comment, Listing, User
 
 def index(request):
 
-    listings = util.get_listings()
+    listings = util.get_active_listings()
 
     return render(
         request, 
@@ -36,7 +36,7 @@ def categories(request):
 
 def category_listing(request, category):
 
-    listings = util.get_listings_by_category(category)
+    listings = util.get_active_listings_by_category(category)
 
     return render(
         request,
@@ -53,9 +53,12 @@ def view_listing(request, listing_id):
     
     if user.is_authenticated:
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
-    
+                
     comments = util.get_comments_by_listing(listing)
     highest_bid = util.get_highest_bid(listing)
+    
+    is_listing_created_by_user = util.is_listing_created_by_user(user, listing_id)
+    is_highest_bidder = util.is_auction_winner(user, listing_id)
 
     return render(
         request,
@@ -64,7 +67,9 @@ def view_listing(request, listing_id):
          "listing_id": listing_id, 
          "is_in_watchlist": is_in_watchlist,
          "comments": comments,
-         "highest_bid": highest_bid
+         "highest_bid": highest_bid,
+         "is_listing_created_by_user": is_listing_created_by_user,
+         "is_highest_bidder": is_highest_bidder
         }
     )
 
@@ -309,3 +314,14 @@ def add_bid(request, listing_id):
             return redirect('listing', listing_id=selected_listing.id)
         
     return redirect('listing', listing_id=selected_listing.id)
+
+
+@login_required
+def close_auction(request, listing_id):
+    
+    selected_listing = util.get_listing_by_id(listing_id)
+    
+    selected_listing.active_state = False
+    selected_listing.save()
+    
+    return HttpResponseRedirect(reverse("index"))

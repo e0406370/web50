@@ -23,6 +23,8 @@ class Listing(models.Model):
     ## INITIALISED UPON CREATION
     creation_date = models.DateTimeField(auto_now_add=True)  # when the listing was created
     creation_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")  # User who created the listing
+    active_state = models.BooleanField(default=True)
+
 
 # foreign key to user
 # foreign key to listing

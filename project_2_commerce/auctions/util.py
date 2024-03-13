@@ -29,14 +29,19 @@ def get_listings():
     return Listing.objects.all()
 
 
+def get_active_listings():
+    
+    return Listing.objects.filter(active_state=True).all()
+
+
 def get_listing_by_id(listing_id: int):
     
     return Listing.objects.get(id=listing_id)
 
 
-def get_listings_by_category(category: str):
+def get_active_listings_by_category(category: str):
 
-    all_listings = Listing.objects.all()
+    all_listings = get_active_listings()
 
     filtered_listings = [
         listing 
@@ -94,6 +99,26 @@ def is_valid_bid(bid: float, listing: Listing):
         return False
     
     if (bid < get_highest_bid(listing)):
+        return False
+    
+    return True
+
+def is_listing_created_by_user(user: User, listing_id: int):
+    
+    return Listing.objects.filter(creation_user=user, id=listing_id).exists()
+
+def is_auction_winner(user: User, listing_id: int):
+    
+    selected_listing = get_listing_by_id(listing_id)
+    
+    # still active listing => False
+    if selected_listing.active_state:
+        return False
+    
+    highest_bid = get_highest_bid(selected_listing)
+    
+    # no match of 1. bid_amount and 2. bid_user => False
+    if not Bid.objects.filter(bid_amount=highest_bid, bid_user=user).exists():
         return False
     
     return True

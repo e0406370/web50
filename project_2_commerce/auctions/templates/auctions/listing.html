@@ -15,7 +15,8 @@
                 <th>L/N</th>
                 <th>Title</th>
                 <th>Description</th>
-                <th>Current Price</th>
+                <th>Starting Bid</th>
+                <th>Highest Bid</th>
                 <th>Created On</th>
                 <th>Created By</th>
                 <th>Categories</th>
@@ -29,6 +30,7 @@
                 <td>{{ listing.title }}</td>
                 <td>{{ listing.description }}</td>
                 <td>${{ listing.starting_bid | floatformat:2 }}</td>
+                <td>${{ highest_bid | floatformat:2 }} by <u>{{ highest_user }}</u></td>
                 <td>{{ listing.creation_date }}</td>
                 <td>{{ listing.creation_user.username }}</td>
                 <td>{{ listing.categories }}</td>

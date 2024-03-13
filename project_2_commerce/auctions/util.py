@@ -1,4 +1,4 @@
-from .models import Listing, User, WatchList
+from .models import Bid, Listing, User, WatchList
 
 placeholder_image = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/1022px-Placeholder_view_vector.svg.png"
 
@@ -41,4 +41,19 @@ def get_listings_by_category(category: str):
 def is_listing_in_watchlist(user: User, listing: Listing):
 
     return WatchList.objects.filter(user=user, listing=listing).exists()
+
+
+def get_highest_bid(listing: Listing):
     
+    existing_bids = Bid.objects.filter(bid_listing=listing)
+    
+    if not (existing_bids.exists()):
+        return listing.starting_bid
+    
+    highest_bid = max([bid.bid_amount for bid in existing_bids])
+    
+    return highest_bid
+
+def get_highest_user(highest_bid: float):
+    
+    return Bid.objects.filter(bid_amount=highest_bid).first().bid_user

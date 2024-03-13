@@ -54,6 +54,9 @@ def view_listing(request, listing_id):
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
     
     comments = Comment.objects.filter(comment_listing=listing)
+    
+    highest_bid = util.get_highest_bid(listing)
+    highest_user = util.get_highest_user(highest_bid)
 
     return render(
         request,
@@ -61,7 +64,9 @@ def view_listing(request, listing_id):
         {"listing": listing, 
          "listing_id": listing_id, 
          "is_in_watchlist": is_in_watchlist,
-         "comments": comments
+         "comments": comments,
+         "highest_bid": highest_bid,
+         "highest_user": highest_user
         }
     )
 

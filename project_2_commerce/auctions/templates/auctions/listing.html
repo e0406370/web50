@@ -40,6 +40,7 @@
     </table>
 
     {% if user.is_authenticated %}
+    
       <h1>HELLO</h1>
 
       {% if is_in_watchlist %}
@@ -56,6 +57,12 @@
         </a>
       {% endif %}
 
+    {% endif %}
+
+    {% if comments %}
+        <h1>Have comments</h1>
+    {% else %}
+        <h2>No comments</h2>
     {% endif %}
 
   {% endif %}

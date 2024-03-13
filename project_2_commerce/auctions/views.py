@@ -52,11 +52,11 @@ def view_listing(request, listing_id):
     
     if user.is_authenticated:
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
-    
+            
     return render(
         request,
         "auctions/listing.html",
-        {"listing": listing, "listing_id": listing_id, "is_in_watchlist": is_in_watchlist},
+        {"listing": listing, "listing_id": listing_id, "is_in_watchlist": is_in_watchlist}
     )
 
 

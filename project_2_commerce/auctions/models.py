@@ -9,6 +9,7 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+    
 # foreign key to user
 class Listing(models.Model):
 
@@ -37,3 +38,8 @@ class Comment(models.Model):
     comment_text = models.CharField(max_length=256)  # value of comment in string
     comment_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  # User linked to this comment
     comment_listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")  # Listing linked to this comment
+    
+
+class WatchList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
+    watchlist = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="watchlist")

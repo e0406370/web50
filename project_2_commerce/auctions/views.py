@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from auctions import util
+
 from .models import Listing, User
 
 
@@ -14,14 +15,22 @@ def index(request):
 
     listings = Listing.objects.all()
 
-    return render(request, "auctions/index.html", {"listings": listings})
+    return render(
+        request, 
+        "auctions/index.html", 
+        {"listings": listings}
+    )
 
 
 def categories(request):
 
     categories = util.get_categories()
 
-    return render(request, "auctions/categories.html", {"categories": categories})
+    return render(
+        request, 
+        "auctions/categories.html", 
+        {"categories": categories}
+    )
 
 
 def category_listing(request, category):
@@ -83,7 +92,9 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(
-                request, "auctions/register.html", {"message": "Passwords must match."}
+                request, 
+                "auctions/register.html", 
+                {"message": "Passwords must match."}
             )
 
         # Attempt to create new user
@@ -98,6 +109,7 @@ def register(request):
             )
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
+    
     else:
         return render(request, "auctions/register.html")
 
@@ -105,26 +117,49 @@ def register(request):
 class ListingForm(forms.Form):
 
     title = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "name": "title"})
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control", 
+                "name": "title"
+            }
+        )
     )
 
     description = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "form-control", "name": "description"})
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control", 
+                "name": "description"
+            }
+        )
     )
 
     starting_bid = forms.FloatField(
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "name": "starting_bid"}
+            attrs={
+                "class": "form-control", 
+                "name": "starting_bid"
+            }
         )
     )
 
     image_url = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "name": "image_url"}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control", 
+                "name": "image_url"
+            }
+        ),
         required=False,
     )
 
     categories = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "name": "categories"}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control", 
+                "name": "categories"
+            }
+        ),
         required=False,
     )
 

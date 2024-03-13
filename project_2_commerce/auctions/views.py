@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from auctions import util
 
-from .models import Comment, Listing, User
+from .models import Bid, Comment, Listing, User
 
 
 def index(request):
@@ -276,5 +276,25 @@ def add_comment(request, listing_id):
             comment_listing=selected_listing,
         )
         new_comment.save()
+        
+    return redirect('listing', listing_id=selected_listing.id)
+
+
+@login_required
+def add_bid(request, listing_id):
+    
+    selected_listing = util.get_listing_by_id(listing_id)
+    current_user = request.user
+    
+    if (request.method == "POST"):
+        
+        bid_amount = request.POST.get("bid")
+        
+        new_bid = Bid(
+            bid_amount=bid_amount,
+            bid_user=current_user,
+            bid_listing=selected_listing,
+        )
+        new_bid.save()
         
     return redirect('listing', listing_id=selected_listing.id)

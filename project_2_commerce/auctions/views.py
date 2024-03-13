@@ -13,7 +13,7 @@ from .models import Comment, Listing, User, WatchList
 
 def index(request):
 
-    listings = Listing.objects.all()
+    listings = util.get_listings()
 
     return render(
         request, 
@@ -46,17 +46,15 @@ def category_listing(request, category):
     
 def view_listing(request, listing_id):
     
-    listing = Listing.objects.get(id=listing_id)
+    listing = util.get_listing_by_id(listing_id)
     user = request.user
     is_in_watchlist = False
     
     if user.is_authenticated:
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
     
-    comments = Comment.objects.filter(comment_listing=listing)
-    
+    comments = util.get_comments_by_listing(listing)
     highest_bid = util.get_highest_bid(listing)
-    highest_user = util.get_highest_user(highest_bid)
 
     return render(
         request,
@@ -66,7 +64,6 @@ def view_listing(request, listing_id):
          "is_in_watchlist": is_in_watchlist,
          "comments": comments,
          "highest_bid": highest_bid,
-         "highest_user": highest_user
         }
     )
 
@@ -236,26 +233,26 @@ def create_listing(request):
 
 @login_required
 def add_to_watchlist(request, listing_id):
-    selected_listing = Listing.objects.get(id=listing_id)
     
-    WatchList.objects.create(user=request.user, listing=selected_listing)
+    selected_listing = util.get_listing_by_id(listing_id)
+    
+    util.add_listing_to_watchlist(request.user, selected_listing)
     
     return HttpResponseRedirect(reverse("watchlist"))
 
 @login_required
 def delete_from_watchlist(request, listing_id):
-    selected_listing = Listing.objects.get(id=listing_id)
     
-    WatchList.objects.filter(user=request.user, listing=selected_listing).first().delete()
+    selected_listing = util.get_listing_by_id(listing_id)
+    
+    util.delete_listing_from_watchlist(request.user, selected_listing)
     
     return HttpResponseRedirect(reverse("watchlist"))
 
 @login_required
 def view_watchlist(request):
     
-    watchlist_objects = WatchList.objects.filter(user=request.user)
-    
-    watchlist_listings = [obj.listing for obj in watchlist_objects]
+    watchlist_listings = util.get_watchlist_by_user(request.user)
     
     return render(
         request, 
@@ -266,7 +263,7 @@ def view_watchlist(request):
 @login_required
 def add_comment(request, listing_id):
     
-    selected_listing = Listing.objects.get(id=listing_id)
+    selected_listing = util.get_listing_by_id(listing_id)
     current_user = request.user
     
     if (request.method == "POST"):

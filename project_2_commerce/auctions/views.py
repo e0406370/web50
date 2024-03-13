@@ -3,12 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from auctions import util
 
-from .models import Listing, User, WatchList
+from .models import Comment, Listing, User, WatchList
 
 
 def index(request):
@@ -52,11 +52,17 @@ def view_listing(request, listing_id):
     
     if user.is_authenticated:
         is_in_watchlist = util.is_listing_in_watchlist(user, listing)
-            
+    
+    comments = Comment.objects.filter(comment_listing=listing)
+
     return render(
         request,
         "auctions/listing.html",
-        {"listing": listing, "listing_id": listing_id, "is_in_watchlist": is_in_watchlist}
+        {"listing": listing, 
+         "listing_id": listing_id, 
+         "is_in_watchlist": is_in_watchlist,
+         "comments": comments
+        }
     )
 
 
@@ -227,13 +233,7 @@ def create_listing(request):
 def add_to_watchlist(request, listing_id):
     selected_listing = Listing.objects.get(id=listing_id)
     
-    watchlist = WatchList.objects.filter(user=request.user).first()
-        
-    if (watchlist is None):
-        WatchList.objects.create(user=request.user, listing=selected_listing)
-
-    else:
-        watchlist.listing.add(selected_listing)
+    WatchList.objects.create(user=request.user, listing=selected_listing)
     
     return HttpResponseRedirect(reverse("watchlist"))
 
@@ -241,8 +241,7 @@ def add_to_watchlist(request, listing_id):
 def delete_from_watchlist(request, listing_id):
     selected_listing = Listing.objects.get(id=listing_id)
     
-    watchlist_listing = WatchList.objects.filter(user=request.user, listing=selected_listing).first()
-    watchlist_listing.delete()
+    WatchList.objects.filter(user=request.user, listing=selected_listing).first().delete()
     
     return HttpResponseRedirect(reverse("watchlist"))
 
@@ -258,3 +257,22 @@ def view_watchlist(request):
         "auctions/watchlist.html",
         {"watchlist": watchlist_listings}
     )
+    
+@login_required
+def add_comment(request, listing_id):
+    
+    selected_listing = Listing.objects.get(id=listing_id)
+    current_user = request.user
+    
+    if (request.method == "POST"):
+        
+        comment_text = request.POST.get("comment")
+        
+        new_comment = Comment(
+            comment_text=comment_text,
+            comment_user=current_user,
+            comment_listing=selected_listing,
+        )
+        new_comment.save()
+        
+    return redirect('listing', listing_id=selected_listing.id)

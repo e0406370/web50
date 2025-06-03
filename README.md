@@ -12,6 +12,8 @@
 
 ### 🔍 Project 0 - Search
 
+Simple front-end for Google Search, Google Image Search, and Google Advanced Search using only HTML and CSS.
+
 - [Project Page](https://cs50.harvard.edu/web/2020/projects/0/search/)
 
 - [Directory](./project_0_search)
@@ -23,9 +25,12 @@
 https://github.com/user-attachments/assets/4fb5a762-6b31-4b74-9072-128c5aaccb30
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
+
 ---
 
 ### 📚 Project 1 - Wiki
+
+Basic Django-based implementation of a Wikipedia-like online encyclopedia with Markdown support.
 
 - [Project Page](https://cs50.harvard.edu/web/2020/projects/1/wiki/)
 
@@ -38,9 +43,12 @@ https://github.com/user-attachments/assets/4fb5a762-6b31-4b74-9072-128c5aaccb30
 https://github.com/user-attachments/assets/7c61a704-e6e8-4001-a784-41a01f7a00e9
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
+
 ---
 
 ### 🛒 Project 2 - Commerce
+
+Basic Django-based implementation of an eBay-like auction platform using Django Models for database support.
 
 - [Project Page](https://cs50.harvard.edu/web/2020/projects/2/commerce/)
 
@@ -53,6 +61,7 @@ https://github.com/user-attachments/assets/7c61a704-e6e8-4001-a784-41a01f7a00e9
 https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
+
 ---
 
 ### 📬 Project 3 - Mail
@@ -66,6 +75,7 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 [![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
+
 ---
 
 ### 🌐 Project 4 - Network
@@ -93,4 +103,5 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 [![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
+
 ---

@@ -3,45 +3,59 @@ import markdownify
 
 from django import forms
 from django.contrib import messages
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import redirect, render
 
 from markdown2 import Markdown
-
 from . import util
 
 
-def index(request):
+def error_404(req: HttpRequest, ex: Exception) -> HttpResponseRedirect | HttpResponsePermanentRedirect:
 
-    return render(
-        request, 
-        "encyclopedia/index.html", 
-        {"entries": util.list_entries()}
+    return redirect(
+        to="index"
     )
 
 
-def search_entry(request):
-    
-    query = request.GET.get("q").strip()
-    
+def index(req: HttpRequest) -> HttpResponse:
+
+    return render(
+        request=req, 
+        template_name="encyclopedia/index.html", 
+        context={"entries": util.list_entries()},
+    )
+
+
+def search_entry(req: HttpRequest) -> HttpResponse | HttpResponseRedirect | HttpResponsePermanentRedirect:
+
+    query = req.GET.get("q")
+
+    if not query:
+        return redirect(
+            to="index"
+        )
+
+    query = query.strip()
     entries = util.list_entries()
-    
-    for entry in entries:
-        if (query == entry):
-            return redirect("wiki", entry_title=entry)
-    
     results = []
-    
+
     for entry in entries:
-        if entry.lower().find(query.lower()) != -1:
+        if query == entry:
+            return redirect(
+                to="wiki",
+                entry_title=entry
+            )
+
+        if query.lower() in entry.lower() != -1:
             results.append(entry)
-    
+
     return render(
-        request, 
-        "encyclopedia/search.html", 
-        {"results": results, "query": query}
+        request=req,
+        template_name="encyclopedia/search.html",
+        context={"query": query, "results": results},
     )
 
-    
+
 class EntryForm(forms.Form):
 
     title = forms.CharField(
@@ -52,7 +66,7 @@ class EntryForm(forms.Form):
             }
         )
     )
-    
+
     contents = forms.CharField(
         widget=forms.Textarea(
             attrs={
@@ -63,98 +77,114 @@ class EntryForm(forms.Form):
     )
 
 
-def create_entry(request):
+def create_entry(req: HttpRequest) -> HttpResponse | HttpResponseRedirect | HttpResponsePermanentRedirect:
 
-    if request.method == "POST":
+    if req.method == "POST":
 
-        form = EntryForm(request.POST)
-    
+        form = EntryForm(req.POST)
+
         if form.is_valid():
             entry_title = form.cleaned_data["title"]
             entry_contents = form.cleaned_data["contents"]
-            
+
             if util.get_entry(entry_title):
-                messages.error(request, f"Entry with title '{entry_title}' already exists.")
-                
-                return render(
-                    request,
-                    "encyclopedia/create.html",
-                    {"form": form}
+                messages.error(
+                    request=req, 
+                    message=f"Entry with title '{entry_title}' already exists."
                 )
-                
+
+                return render(
+                    request=req,
+                    template_name="encyclopedia/create.html",
+                    context={"form": form}
+                )
+
             else:
                 util.save_entry(
-                    entry_title.strip(), 
-                    markdownify.markdownify(entry_contents.strip())
+                    title=entry_title.strip(), 
+                    content=markdownify.markdownify(entry_contents.strip())
                 )
-                
-                return redirect("wiki", entry_title=entry_title)
+
+                return redirect(
+                    to="wiki", 
+                    entry_title=entry_title
+                )
 
     return render(
-        request, 
-        "encyclopedia/create.html", 
-        {"form": EntryForm()}
+        request=req, 
+        template_name="encyclopedia/create.html", 
+        context={"form": EntryForm()}
     )
 
 
-def view_entry(request, entry_title):
+def view_entry(req: HttpRequest, entry_title: str) -> HttpResponse:
 
     entry_contents = util.get_entry(entry_title)
 
     if entry_contents == None:
         return render(
-            request, 
-            "encyclopedia/error.html", 
-            {"entry_title": entry_title}
+            request=req, 
+            template_name="encyclopedia/error.html", 
+            context={"entry_title": entry_title}
         )
 
     markdowner = Markdown()
     entry_contents_converted = markdowner.convert(entry_contents)
 
     return render(
-        request,
-        "encyclopedia/entry.html",
-        {"entry_title": entry_title, "entry_contents": entry_contents_converted},
+        request=req,
+        template_name="encyclopedia/entry.html",
+        context={"entry_title": entry_title, "entry_contents": entry_contents_converted},
     )
 
 
-def edit_entry(request, entry_title):
+def edit_entry(req: HttpRequest, entry_title: str) -> HttpResponse:
 
     entry_contents = util.get_entry(entry_title)
 
     if entry_contents == None:
         return render(
-            request, 
-            "encyclopedia/error.html", 
-            {"entry_title": entry_title}
+            request=req, 
+            template_name="encyclopedia/error.html", 
+            context={"entry_title": entry_title}
         )
 
     markdowner = Markdown()
     entry_contents_converted = markdowner.convert(entry_contents)
 
     return render(
-        request,
-        "encyclopedia/edit.html",
-        {"entry_title": entry_title, "entry_contents": entry_contents_converted},
+        request=req,
+        template_name="encyclopedia/edit.html",
+        context={"entry_title": entry_title, "entry_contents": entry_contents_converted},
     )
 
 
-def save_entry(request, entry_title):
+def save_entry(req: HttpRequest, entry_title: str) -> HttpResponseRedirect | HttpResponsePermanentRedirect:
 
-    if request.method == "POST":
+    if req.method == "POST":
 
-        entry_contents = request.POST.get("edit").strip()
+        entry_contents = req.POST.get("edit").strip()
 
         util.save_entry(
-            entry_title, 
-            markdownify.markdownify(entry_contents.strip())
+            title=entry_title, 
+            content=markdownify.markdownify(entry_contents.strip())
         )
         
-        return redirect("wiki", entry_title=entry_title)
+        return redirect(
+            to="wiki", 
+            entry_title=entry_title
+        )
+        
+    return redirect(
+        to="index"
+    )
 
 
-def random_entry(request):
+def random_entry(req: HttpRequest) -> HttpResponseRedirect | HttpResponsePermanentRedirect:
 
     random_entry = random.choice(util.list_entries())
 
-    return redirect("wiki", entry_title=random_entry)
+    return redirect(
+        to="wiki", 
+        entry_title=random_entry
+    )

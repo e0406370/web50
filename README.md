@@ -22,6 +22,7 @@
 
 https://github.com/user-attachments/assets/4fb5a762-6b31-4b74-9072-128c5aaccb30
 
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 ---
 
 ### 📚 Project 1 - Wiki
@@ -36,6 +37,7 @@ https://github.com/user-attachments/assets/4fb5a762-6b31-4b74-9072-128c5aaccb30
 
 https://github.com/user-attachments/assets/7c61a704-e6e8-4001-a784-41a01f7a00e9
 
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 ---
 
 ### 🛒 Project 2 - Commerce
@@ -50,6 +52,7 @@ https://github.com/user-attachments/assets/7c61a704-e6e8-4001-a784-41a01f7a00e9
 
 https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 ---
 
 ### 📬 Project 3 - Mail
@@ -62,6 +65,7 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 
 [![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
 
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 ---
 
 ### 🌐 Project 4 - Network
@@ -73,6 +77,8 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 #### Preview:
 
 [![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
+
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 
 ---
 
@@ -86,4 +92,5 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 
 [![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
 
+#### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 ---

@@ -76,7 +76,7 @@ Simple email client that makes API calls to send and receive emails, built with 
 
 #### Preview:
 
-https://github.com/user-attachments/assets/5460033a-a42b-4ec0-8353-d323bdb4aab3
+https://github.com/user-attachments/assets/ee47c951-ff66-443d-bdaf-0e5454093528
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 

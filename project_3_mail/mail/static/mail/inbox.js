@@ -1,25 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#compose').addEventListener('click', compose_email);
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
 
-  // Send email via compose form
   document.querySelector('#compose-form').onsubmit = send_email;
 
-  // By default, load the inbox
   load_mailbox('inbox');
 });
 
 function compose_email() {
 
-  // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
-  // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';  
   document.querySelector('#compose-body').value = '';
@@ -30,11 +25,9 @@ function compose_email() {
  */
 function load_mailbox(mailbox) {
   
-  // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
-  // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   fetch(`/emails/${mailbox}`, {
@@ -55,27 +48,30 @@ function load_mailbox(mailbox) {
 
         data.forEach(email => {
           const emailRow = document.createElement('div');
-          emailRow.classList.add('row', 'border', 'border-dark', 'mb-2', 'clickable_email_row', (!email.read ? 'bg-white' : 'bg-secondary'));
-          emailContainer.appendChild(emailRow);
+          emailRow.classList.add('row', 'border', 'border-light', 'font-weight-bold', 'mb-2', 'clickable_email_row');
+          if (email.read) emailRow.classList.add('bg-secondary');
 
           const emailColSender = document.createElement('div');
-          emailColSender.classList.add('col', 'text-left', 'font-weight-bold');
+          emailColSender.classList.add('col', 'text-left');
           emailColSender.innerHTML = email.sender;
           emailRow.appendChild(emailColSender);
 
           const emailColSubject = document.createElement('div');
-          emailColSubject.classList.add('col', 'font-weight-bold');
+          emailColSubject.classList.add('col');
           emailColSubject.innerHTML = email.subject;
           emailRow.appendChild(emailColSubject);
 
           const emailColTimestamp = document.createElement('div');
-          emailColTimestamp.classList.add('col', 'text-right', 'font-weight-bold');
+          emailColTimestamp.classList.add('col', 'text-right');
           emailColTimestamp.innerHTML = email.timestamp;
           emailRow.appendChild(emailColTimestamp);
 
           emailRow.addEventListener('click', () => {
+            update_email(email.id, "read");
             load_email(email.id);
           })
+
+          emailContainer.appendChild(emailRow);
         });
 
         document.querySelector("#emails-view").append(emailContainer);
@@ -88,13 +84,75 @@ function load_mailbox(mailbox) {
  */
 function load_email(email_id) {
 
-    console.info(email_id)
+  fetch(`/emails/${email_id}`, {
+    method: "GET"
+  })
+    .then(resp => resp.json())
+    .then(email => {
+      const emailMetadata = document.createElement('table');
+      emailMetadata.classList.add('table', 'border', 'text-white')
+      emailMetadata.innerHTML = `
+        <tbody>
+          <tr>
+            <th scope="row"> From </th>
+            <td> ${email.sender} </td>
+          </tr>
+          <tr>
+            <th scope="row"> To </th>
+            <td> ${email.recipients} </td>
+          </tr>
+          <tr>
+            <th scope="row"> Subject </th>
+            <td> ${email.subject} </td>
+          </tr>
+          <tr>
+            <th scope="row"> Timestamp </th>
+            <td> ${email.timestamp} </td>
+          </tr>
+        </tbody>
+      `
+
+      const replyBtn = document.createElement('button');
+      replyBtn.classList.add('btn', 'btn-primary', 'mb-2');
+      replyBtn.innerHTML = 'Reply';
+      replyBtn.addEventListener('click', () => {
+
+      })
+
+      const emailBody = document.createElement('p');
+      emailBody.classList.add('border', 'border-secondary', 'mb-2');
+      emailBody.style.minHeight = '100px';
+      emailBody.innerHTML = email.body;
+
+      document.querySelector("#emails-view").innerHTML = '';
+      document.querySelector("#emails-view").append(emailMetadata);
+      document.querySelector("#emails-view").append(replyBtn);
+      document.querySelector("#emails-view").append(document.createElement('hr'));
+      document.querySelector("#emails-view").append(emailBody);
+    })
+}
+
+/**
+ * @param {int} email_id
+ * @param {string} param
+ */
+function update_email(email_id, param) {
+
+  update_body = {}
+  if (param === "read") update_body["read"] = true
+  if (param === "archived") update_body["archived"] = true
+
+  fetch(`/emails/${email_id}`, {
+    method: "PUT",
+    body: JSON.stringify(update_body),
+  })
 }
 
 /**
  * @param {SubmitEvent} event
  */
 function send_email(event) {
+
   event.preventDefault();
 
   const recipients = document.querySelector('#compose-recipients').value;

@@ -8,24 +8,24 @@
 
 ## Mailbox
 
-- [ ] When a user visits their Inbox, Sent mailbox, or Archive, load the appropriate mailbox.
-- [ ] You’ll likely want to make a GET request to /emails/<mailbox> to request the emails for a particular mailbox.
-- [ ] When a mailbox is visited, the application should first query the API for the latest emails in that mailbox.
-- [ ] When a mailbox is visited, the name of the mailbox should appear at the top of the page (this part is done for you).
-- [ ] Each email should then be rendered in its own box (e.g. as a <div> with a border) that displays who the email is from, what the subject line is, and the timestamp of the email.
-- [ ] If the email is unread, it should appear with a white background.
-- [ ] If the email has been read, it should appear with a gray background.
+- [X] When a user visits their Inbox, Sent mailbox, or Archive, load the appropriate mailbox.
+- [X] You’ll likely want to make a GET request to /emails/<mailbox> to request the emails for a particular mailbox.
+- [X] When a mailbox is visited, the application should first query the API for the latest emails in that mailbox.
+- [X] When a mailbox is visited, the name of the mailbox should appear at the top of the page (this part is done for you).
+- [X] Each email should then be rendered in its own box (e.g. as a <div> with a border) that displays who the email is from, what the subject line is, and the timestamp of the email.
+- [X] If the email is unread, it should appear with a white background.
+- [X] If the email has been read, it should appear with a gray background.
 
 ## View Email
 
-- [ ] When a user clicks on an email, the user should be taken to a view where they see the content of that email.
-- [ ] You’ll likely want to make a GET request to /emails/<email_id> to request the email.
-- [ ] Your application should show the email’s sender, recipients, subject, timestamp, and body.
-- [ ] You’ll likely want to add an additional div to inbox.html (in addition to emails-view and compose-view) for displaying the email.
-- [ ] Be sure to update your code to hide and show the right views when navigation options are clicked.
-- [ ] See the hint in the Hints section about how to add an event listener to an HTML element that you’ve added to the DOM.
-- [ ] Once the email has been clicked on, you should mark the email as read.
-- [ ] Recall that you can send a PUT request to /emails/<email_id> to update whether an email is read or not.
+- [X] When a user clicks on an email, the user should be taken to a view where they see the content of that email.
+- [X] You’ll likely want to make a GET request to /emails/<email_id> to request the email.
+- [X] Your application should show the email’s sender, recipients, subject, timestamp, and body.
+- [X] You’ll likely want to add an additional div to inbox.html (in addition to emails-view and compose-view) for displaying the email.
+- [X] Be sure to update your code to hide and show the right views when navigation options are clicked.
+- [X] See the hint in the Hints section about how to add an event listener to an HTML element that you’ve added to the DOM.
+- [X] Once the email has been clicked on, you should mark the email as read.
+- [X] Recall that you can send a PUT request to /emails/<email_id> to update whether an email is read or not.
 
 ## Archive and Unarchive
 

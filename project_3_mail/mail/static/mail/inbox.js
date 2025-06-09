@@ -16,7 +16,7 @@ function compose_email() {
   document.querySelector('#compose-view').style.display = 'block';
 
   document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';  
+  document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 }
 
@@ -37,7 +37,7 @@ function load_mailbox(mailbox) {
     .then(data => {
       if (data.length === 0) {
         const emptyMailbox = document.createElement('div');
-        emptyMailbox.classList.add('alert', 'alert-info','text-center', 'font-weight-bold');
+        emptyMailbox.classList.add('alert', 'alert-info', 'text-center', 'font-weight-bold');
         emptyMailbox.innerHTML = 'This mailbox is empty. You are all caught up!';
 
         document.querySelector("#emails-view").append(emptyMailbox);
@@ -68,7 +68,7 @@ function load_mailbox(mailbox) {
 
           emailRow.addEventListener('click', () => {
             update_email(email.id, "read");
-            load_email(email.id);
+            load_email(email.id, mailbox);
           })
 
           emailContainer.appendChild(emailRow);
@@ -76,13 +76,14 @@ function load_mailbox(mailbox) {
 
         document.querySelector("#emails-view").append(emailContainer);
       }
-    })
+    });
 }
 
 /**
  * @param {int} email_id
+ * @param {string} mailbox
  */
-function load_email(email_id) {
+function load_email(email_id, mailbox) {
 
   fetch(`/emails/${email_id}`, {
     method: "GET"
@@ -112,12 +113,36 @@ function load_email(email_id) {
         </tbody>
       `
 
+      const btnRow = document.createElement('div');
+      btnRow.classList.add('row');
+
       const replyBtn = document.createElement('button');
-      replyBtn.classList.add('btn', 'btn-primary', 'mb-2');
+      replyBtn.classList.add('btn', 'btn-primary', 'mb-2', 'ml-2');
       replyBtn.innerHTML = 'Reply';
       replyBtn.addEventListener('click', () => {
 
       })
+      btnRow.appendChild(replyBtn);
+
+      const archiveBtn = document.createElement('button');
+      const unarchiveBtn = document.createElement('button');
+
+      if (mailbox === "inbox") {
+        archiveBtn.classList.add('btn', 'btn-success', 'mb-2', 'ml-2');
+        archiveBtn.innerHTML = 'Archive';
+        archiveBtn.addEventListener('click', () => {
+          update_email(email_id, "archive")
+        })
+        btnRow.appendChild(archiveBtn);
+      }
+      else if (mailbox === "archive") {
+        unarchiveBtn.classList.add('btn', 'btn-danger', 'mb-2', 'ml-2');
+        unarchiveBtn.innerHTML = 'Unarchive';
+        unarchiveBtn.addEventListener('click', () => {
+          update_email(email_id, "unarchive")
+        })
+        btnRow.appendChild(unarchiveBtn);
+      }
 
       const emailBody = document.createElement('p');
       emailBody.classList.add('border', 'border-secondary', 'mb-2');
@@ -126,10 +151,10 @@ function load_email(email_id) {
 
       document.querySelector("#emails-view").innerHTML = '';
       document.querySelector("#emails-view").append(emailMetadata);
-      document.querySelector("#emails-view").append(replyBtn);
+      document.querySelector("#emails-view").append(btnRow);
       document.querySelector("#emails-view").append(document.createElement('hr'));
       document.querySelector("#emails-view").append(emailBody);
-    })
+    });
 }
 
 /**
@@ -139,13 +164,19 @@ function load_email(email_id) {
 function update_email(email_id, param) {
 
   update_body = {}
-  if (param === "read") update_body["read"] = true
-  if (param === "archived") update_body["archived"] = true
+  if (param === "read") update_body["read"] = true;
+  if (param === "archive") update_body["archived"] = true;
+  else if (param === "unarchive") update_body["archived"] = false;
 
   fetch(`/emails/${email_id}`, {
     method: "PUT",
     body: JSON.stringify(update_body),
   })
+    .then(() => {
+      if (param === "archive" || param === "unarchive") {
+        load_mailbox('inbox');
+      }
+    });
 }
 
 /**
@@ -175,5 +206,5 @@ function send_email(event) {
         alert(data.message);
         load_mailbox('sent');
       }
-    }))
+    }));
 }

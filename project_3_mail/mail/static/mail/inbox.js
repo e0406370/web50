@@ -170,7 +170,7 @@ function update_email(email_id, param) {
 
   fetch(`/emails/${email_id}`, {
     method: "PUT",
-    body: JSON.stringify(update_body),
+    body: JSON.stringify(update_body)
   })
     .then(() => {
       if (param === "archive" || param === "unarchive") {
@@ -188,7 +188,7 @@ function reply_email(original_email) {
   document.querySelector('#compose-view').style.display = 'block';
 
   document.querySelector('#compose-recipients').value = original_email.sender;
-  document.querySelector('#compose-subject').value = `${(!original_email.subject.trim().startsWith("Re:") ? 'Re:': '')}${original_email.subject}`;
+  document.querySelector('#compose-subject').value = `${(!original_email.subject.trim().startsWith("Re:") ? 'Re: ': '')}` + `${original_email.subject}`;
   document.querySelector('#compose-body').value = `On ${original_email.timestamp} ${original_email.sender} wrote: \n${original_email.body}`;
 }
 
@@ -209,7 +209,7 @@ function send_email(event) {
       recipients: recipients,
       subject: subject,
       body: body,
-    }),
+    })
   })
     .then(resp => resp.json().then(data => {
       if (!resp.ok) {

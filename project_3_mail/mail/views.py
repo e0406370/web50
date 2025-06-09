@@ -155,6 +155,7 @@ def email(request, email_id: int) -> HttpResponse | JsonResponse:
 
 
 def login_view(request) -> HttpResponse | HttpResponseRedirect:
+
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -181,11 +182,13 @@ def login_view(request) -> HttpResponse | HttpResponseRedirect:
 
 
 def logout_view(request) -> HttpResponseRedirect:
+
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 
 def register(request) -> HttpResponse | HttpResponseRedirect:
+
     if request.method == "POST":
         email = request.POST["email"]
 
@@ -211,6 +214,7 @@ def register(request) -> HttpResponse | HttpResponseRedirect:
                 "mail/register.html",
                 {"message": "Email address already taken."}
             )
+
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
 

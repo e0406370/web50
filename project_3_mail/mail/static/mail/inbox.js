@@ -25,6 +25,9 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+/**
+ * @param {string} mailbox
+ */
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
@@ -35,12 +38,16 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
-function send_email() {
+
+/**
+ * @param {SubmitEvent} event
+ */
+function send_email(event) {
+  event.preventDefault();
 
   const recipients = document.querySelector('#compose-recipients').value;
   const subject = document.querySelector('#compose-subject').value;
   const body = document.querySelector('#compose-body').value;
-  console.info(recipients, subject, body);
 
   fetch('/emails', {
     method: "POST",
@@ -50,12 +57,13 @@ function send_email() {
       body: body,
     }),
   })
-  .then((response) => {
-    response.json();
-  })
-  .then(() => {
-    load_mailbox('sent');
-  });
-
-  return false;
+    .then((resp) => resp.json().then(data => {
+      if (!resp.ok) {
+        alert(data.error);
+      }
+      else {
+        alert(data.message);
+        load_mailbox('sent');
+      }
+    }))
 }

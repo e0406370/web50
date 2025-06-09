@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
 
-  // Task 1: Send email via compose form
+  // Send email via compose form
   document.querySelector('#compose-form').onsubmit = send_email;
 
   // By default, load the inbox
@@ -55,7 +55,7 @@ function load_mailbox(mailbox) {
 
         data.forEach(email => {
           const emailRow = document.createElement('div');
-          emailRow.classList.add('row', 'border', 'border-dark', 'mb-2', (email.read ? 'bg-white' : 'bg-secondary'));
+          emailRow.classList.add('row', 'border', 'border-dark', 'mb-2', 'clickable_email_row', (!email.read ? 'bg-white' : 'bg-secondary'));
           emailContainer.appendChild(emailRow);
 
           const emailColSender = document.createElement('div');
@@ -72,6 +72,10 @@ function load_mailbox(mailbox) {
           emailColTimestamp.classList.add('col', 'text-right', 'font-weight-bold');
           emailColTimestamp.innerHTML = email.timestamp;
           emailRow.appendChild(emailColTimestamp);
+
+          emailRow.addEventListener('click', () => {
+            load_email(email.id);
+          })
         });
 
         document.querySelector("#emails-view").append(emailContainer);
@@ -79,6 +83,13 @@ function load_mailbox(mailbox) {
     })
 }
 
+/**
+ * @param {int} email_id
+ */
+function load_email(email_id) {
+
+    console.info(email_id)
+}
 
 /**
  * @param {SubmitEvent} event

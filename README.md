@@ -66,13 +66,17 @@ https://github.com/user-attachments/assets/caa4fc5a-a0a5-46f8-97cd-2db4e61d2f23
 
 ### 📬 Project 3 - Mail
 
-**[WORK IN PROGRESS]**
+Simple email client that makes API calls to send and receive emails, built with Django and Javascript.
 
 - [Project Page](https://cs50.harvard.edu/web/2020/projects/3/mail/)
+  
+- [Directory](./project_3_mail)
+
+- [Specifications](./project_3_mail/specification.md)
 
 #### Preview:
 
-[![](https://markdown-videos-api.jorgenkh.no/youtube/dQw4w9WgXcQ)](https://youtu.be/dQw4w9WgXcQ)
+https://github.com/user-attachments/assets/ee47c951-ff66-443d-bdaf-0e5454093528
 
 #### <div align="right"> [🔝Return to top](#cs50w---web-programming-with-python-and-javascript) </div>
 

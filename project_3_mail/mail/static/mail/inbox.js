@@ -36,6 +36,47 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch(`/emails/${mailbox}`, {
+    method: "GET"
+  })
+    .then(resp => resp.json())
+    .then(data => {
+      if (data.length === 0) {
+        const emptyMailbox = document.createElement('div');
+        emptyMailbox.classList.add('alert', 'alert-info','text-center', 'font-weight-bold');
+        emptyMailbox.innerHTML = 'This mailbox is empty. You are all caught up!';
+
+        document.querySelector("#emails-view").append(emptyMailbox);
+      }
+      else {
+        const emailContainer = document.createElement('div');
+        emailContainer.classList.add('container');
+
+        data.forEach(email => {
+          const emailRow = document.createElement('div');
+          emailRow.classList.add('row', 'border', 'border-dark', 'mb-2', (email.read ? 'bg-white' : 'bg-secondary'));
+          emailContainer.appendChild(emailRow);
+
+          const emailColSender = document.createElement('div');
+          emailColSender.classList.add('col', 'text-left', 'font-weight-bold');
+          emailColSender.innerHTML = email.sender;
+          emailRow.appendChild(emailColSender);
+
+          const emailColSubject = document.createElement('div');
+          emailColSubject.classList.add('col', 'font-weight-bold');
+          emailColSubject.innerHTML = email.subject;
+          emailRow.appendChild(emailColSubject);
+
+          const emailColTimestamp = document.createElement('div');
+          emailColTimestamp.classList.add('col', 'text-right', 'font-weight-bold');
+          emailColTimestamp.innerHTML = email.timestamp;
+          emailRow.appendChild(emailColTimestamp);
+        });
+
+        document.querySelector("#emails-view").append(emailContainer);
+      }
+    })
 }
 
 
@@ -57,7 +98,7 @@ function send_email(event) {
       body: body,
     }),
   })
-    .then((resp) => resp.json().then(data => {
+    .then(resp => resp.json().then(data => {
       if (!resp.ok) {
         alert(data.error);
       }

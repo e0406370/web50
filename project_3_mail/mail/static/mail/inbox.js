@@ -120,7 +120,7 @@ function load_email(email_id, mailbox) {
       replyBtn.classList.add('btn', 'btn-primary', 'mb-2', 'ml-2');
       replyBtn.innerHTML = 'Reply';
       replyBtn.addEventListener('click', () => {
-
+        reply_email(email);
       })
       btnRow.appendChild(replyBtn);
 
@@ -177,6 +177,19 @@ function update_email(email_id, param) {
         load_mailbox('inbox');
       }
     });
+}
+
+/**
+ * @param {any} original_email
+ */
+function reply_email(original_email) {
+
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  document.querySelector('#compose-recipients').value = original_email.sender;
+  document.querySelector('#compose-subject').value = `${(!original_email.subject.trim().startsWith("Re:") ? 'Re:': '')}${original_email.subject}`;
+  document.querySelector('#compose-body').value = `On ${original_email.timestamp} ${original_email.sender} wrote: \n${original_email.body}`;
 }
 
 /**

@@ -84,9 +84,13 @@ https://github.com/user-attachments/assets/ee47c951-ff66-443d-bdaf-0e5454093528
 
 ### 🌐 Project 4 - Network
 
-**[WORK IN PROGRESS]**
+Minimal Django-powered social network that allows users to post threads, follow others, and like posts.
 
 - [Project Page](https://cs50.harvard.edu/web/2020/projects/4/network/)
+
+- [Directory](./project_4_network)
+
+- [Specifications](./project_4_network/specification.md)
 
 #### Preview:
 
